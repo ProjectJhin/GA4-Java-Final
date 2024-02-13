@@ -33,6 +33,7 @@ public class HomeController {
     public String index(Model model) {
 
         model.addAttribute("title", "MyJobs");
+        model.addAttribute("jobs", jobRepository.findAll());
 
         return "index";
     }
@@ -64,14 +65,15 @@ public class HomeController {
             }
 
             jobRepository.save(newJob);
-            return "redirect:";
+            model.addAttribute("jobs", jobRepository.findAll());
+            return "index";
         }
     }
 
     @GetMapping("view/{jobId}")
-    public String displayViewJob(Model model, @PathVariable int jobId) {
-
-            return "view";
+    public String displayViewJob(@PathVariable int jobId, Model model) {
+        model.addAttribute("job", jobRepository.findById(jobId).get());
+        return "view";
     }
 
 }
